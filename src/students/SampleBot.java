@@ -1,4 +1,4 @@
-package johndoe;
+package students;
 
 import snakes.Bot;
 import snakes.Coordinate;
