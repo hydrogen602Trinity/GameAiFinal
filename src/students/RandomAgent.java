@@ -7,7 +7,6 @@ import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
 
-
 public class RandomAgent implements Bot {
     private static final Direction[] DIRECTIONS = new Direction[] {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
 
