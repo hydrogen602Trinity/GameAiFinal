@@ -10,7 +10,7 @@
             "request": "launch",
             "mainClass": "snakes.SnakesUIMain",
             "projectName": "snakes-game-tutorial_4cc99e8d",
-            "args": ["students.SampleBot", "students.RandomAgent"]
+            "args": ["students.SampleBot", "students.QLearningBot"]
         }
     ]
 }

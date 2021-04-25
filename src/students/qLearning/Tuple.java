@@ -10,6 +10,10 @@ public class Tuple<A, B> {
         _1 = b;
     }
 
+    public Tuple<A, B> of(A a, B b) {
+        return new Tuple<A, B>(a, b);
+    }
+
     @Override
     public boolean equals(Object o) {
         return o instanceof Tuple<?, ?> && (((Tuple<?, ?>) o)._0.equals(this._0) && ((Tuple<?, ?>) o)._1.equals(this._1));
