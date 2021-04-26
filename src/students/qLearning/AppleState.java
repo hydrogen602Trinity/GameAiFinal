@@ -8,23 +8,23 @@ import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
 
-public class BasicState implements State, Serializable {
+public class AppleState implements State, Serializable {
     
     private Coordinate appleRel;
 
-    private int[] wallDistance;
+    private boolean[] nextToWall;
 
     private Direction facing;
 
-    public BasicState(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
+    public AppleState(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
         Coordinate center = snake.getHead();
         this.appleRel = new Coordinate(apple.x - center.x, apple.y - center.y);
 
-        wallDistance = new int[4];
-        wallDistance[0] = center.x;
-        wallDistance[1] = center.y;
-        wallDistance[2] = mazeSize.x - center.x;
-        wallDistance[3] = mazeSize.y - center.y;
+        nextToWall = new boolean[4];
+        nextToWall[0] = center.x == 0;
+        nextToWall[1] = center.y == 0;
+        nextToWall[2] = mazeSize.x - center.x == 0;
+        nextToWall[3] = mazeSize.y - center.y == 0;
 
         // get all directions but backward cause thats illegal.
         Coordinate head = snake.getHead();
@@ -66,13 +66,13 @@ public class BasicState implements State, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof BasicState) {
-            BasicState st = (BasicState) o;
+        if (o instanceof AppleState) {
+            AppleState st = (AppleState) o;
             return appleRel.equals(st.appleRel) && //*/
-                wallDistance[0] == st.wallDistance[0] && 
-                wallDistance[1] == st.wallDistance[1] && 
-                wallDistance[2] == st.wallDistance[2] && 
-                wallDistance[3] == st.wallDistance[3];
+                nextToWall[0] == st.nextToWall[0] && 
+                nextToWall[1] == st.nextToWall[1] && 
+                nextToWall[2] == st.nextToWall[2] && 
+                nextToWall[3] == st.nextToWall[3];
         }
 
         return false;
@@ -81,26 +81,27 @@ public class BasicState implements State, Serializable {
     @Override
     public int hashCode() {
         //https://www.baeldung.com/java-hashcode
-        int starter = wallDistance[0] + wallDistance[1] + wallDistance[2] + wallDistance[3];
-        int result = (int) (starter ^ (starter >>> 32));
-        result = 31 * result + wallDistance[0];
-        result = 31 * result + wallDistance[1];
-        result = 31 * result + wallDistance[2];
-        result = 31 * result + wallDistance[3];
-        result = 31 * result + appleRel.x;
+        //int starter = wallDistance[0] + wallDistance[1] + wallDistance[2] + wallDistance[3];
+        int result = (int) (appleRel.x ^ (appleRel.x >>> 32));
+        result = 31 * result + (nextToWall[0] ? 1 : 0);
+        result = 31 * result + (nextToWall[1] ? 1 : 0);
+        result = 31 * result + (nextToWall[2] ? 1 : 0);
+        result = 31 * result + (nextToWall[3] ? 1 : 0);
+        //result = 31 * result + appleRel.x;
         result = 31 * result + appleRel.y;
         return result;
     }
 
     @Override
     public String toString() {
-        String s = "[";
-        for (int e: wallDistance) {
+        String s = "([";
+        for (boolean e: nextToWall) {
             s += e + ", ";
         }
         if (s.length() > 1) {
             s = s.substring(0, s.length()-2);
         }
-        return s + "]";
+        String point = "(" + appleRel.x + ", " + appleRel.y + ")";
+        return s + "], " + point + ")";
     }
 }

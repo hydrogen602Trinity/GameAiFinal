@@ -7,7 +7,8 @@ import snakes.Bot;
 import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
-import students.qLearning.BasicState;
+import students.qLearning.AppleState;
+//import students.qLearning.BasicState;
 import students.qLearning.State;
 import students.qLearning.Tuple;
 import students.qLearning.UtilStuff;
@@ -32,7 +33,7 @@ public class QLearningBot implements Bot, Serializable {
     @Override
     public Direction chooseDirection(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
         qStuff.test += 1;
-        State st = new BasicState(snake, opponent, mazeSize, apple);
+        State st = new AppleState(snake, opponent, mazeSize, apple);
 
         Direction choice = qStuff.getMove(st);
 
@@ -72,7 +73,7 @@ public class QLearningBot implements Bot, Serializable {
 
         double points = appleEatPoints + deathPoints + killPoints + livingPoints;
 
-        State nextSt = new BasicState(snake0, snake1, mazeSize, apple);
+        State nextSt = new AppleState(snake0, snake1, mazeSize, apple);
 
         return new Tuple<Double, State>(points, nextSt);
     }
@@ -86,6 +87,5 @@ public class QLearningBot implements Bot, Serializable {
         System.out.println("Debug counter: " + qStuff.test);
 
         UtilStuff.writeObject(qStuff, "q.bin");
-        
     }
 }
