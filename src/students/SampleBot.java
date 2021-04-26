@@ -55,4 +55,10 @@ public class SampleBot implements Bot {
         else return validMoves[0];
         /* Cannot avoid losing here */
     }
+
+    @Override
+    public void cleanup(int winner) {
+        // TODO Auto-generated method stub
+        
+    }
 }

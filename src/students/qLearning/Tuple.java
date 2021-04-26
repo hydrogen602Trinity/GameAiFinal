@@ -1,6 +1,8 @@
 package students.qLearning;
 
-public class Tuple<A, B> {
+import java.io.Serializable;
+
+public class Tuple<A, B> implements Serializable {
 
     public A _0;
     public B _1;
@@ -23,5 +25,10 @@ public class Tuple<A, B> {
     public int hashCode() {
         // https://stackoverflow.com/questions/2943347/combining-java-hashcodes-into-a-master-hashcode
         return 1597 * (_0.hashCode()) ^ 1453 * (_1.hashCode());
+    }
+
+    @Override
+    public String toString() {
+        return "(" + _0.toString() + ", " + _1.toString() + ")";
     }
 }

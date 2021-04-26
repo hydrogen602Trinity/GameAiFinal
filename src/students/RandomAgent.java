@@ -16,4 +16,10 @@ public class RandomAgent implements Bot {
         Direction randomDir = DIRECTIONS[random.nextInt(DIRECTIONS.length)];
         return randomDir;
     }
+
+    @Override
+    public void cleanup(int winner) {
+        // TODO Auto-generated method stub
+        
+    }
 }

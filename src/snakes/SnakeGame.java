@@ -207,13 +207,21 @@ public class SnakeGame {
         boolean cont = !(s0dead || s1dead);
 
         if (!cont) {
+            int winner = -1;
+
             gameResult = "";
             String result = "0 - 0";
-            if (s0dead ^ s1dead)
+            if (s0dead ^ s1dead) {
                 result = (s0dead ? 0 : 1) + " - " + (s1dead ? 0 : 1);
-            else if (s0dead && s1dead)
+                winner = (s1dead) ? 0 : 1; // if s1 is dead, then 0 won
+            }
+            else if (s0dead && s1dead) {
                 result = (appleEaten0 > appleEaten1 ? 1 : 0) + " - " + (appleEaten1 > appleEaten0 ? 1 : 0);
+                winner = (appleEaten0 > appleEaten1) ? 0 : 1; // if 0 ate more apples
+            }
 
+            bot0.cleanup(winner);
+            bot1.cleanup(winner);
             gameResult += result;
         }
         return cont;

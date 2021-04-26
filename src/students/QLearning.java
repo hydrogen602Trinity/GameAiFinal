@@ -1,22 +1,35 @@
 package students;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Optional;
 
 import snakes.Direction;
 import students.qLearning.*;
 
-public class QLearning {
+public class QLearning implements Serializable {
     
     private HashMap<Tuple<State, Direction>, Double> qValues;
 
     private double alpha;
     private double discount;
 
+    public int test;
+
     public QLearning(double alpha, double discount) {
         qValues = new HashMap<Tuple<State, Direction>, Double>();
         this.alpha = alpha;
         this.discount = discount;
+        test = 0;
+    }
+
+    public void debug() {
+        System.out.println("{");
+        for (Tuple<State, Direction> key: qValues.keySet()) {
+            double val = qValues.get(key);
+            System.out.println("\t" + key.toString() + ": " + val);
+        }
+        System.out.println("}");
     }
 
     public QLearning() {
