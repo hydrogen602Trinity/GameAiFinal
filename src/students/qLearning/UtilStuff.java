@@ -4,9 +4,10 @@ import java.io.*;
 import java.util.Optional;
 
 import snakes.Direction;
-import students.QLearningBot;
 
 public class UtilStuff {
+
+    public static final Direction[] DIRECTIONS = new Direction[] {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
     
     private UtilStuff() {}
 

@@ -3,6 +3,7 @@ package students;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Random;
 
 import snakes.Direction;
 import students.qLearning.*;
@@ -13,13 +14,15 @@ public class QLearning implements Serializable {
 
     private double alpha;
     private double discount;
+    private double epsilon;
 
     public int test;
 
-    public QLearning(double alpha, double discount) {
+    public QLearning(double alpha, double discount, double epsilon) {
         qValues = new HashMap<Tuple<State, Direction>, Double>();
         this.alpha = alpha;
         this.discount = discount;
+        this.epsilon = epsilon;
         test = 0;
     }
 
@@ -33,7 +36,7 @@ public class QLearning implements Serializable {
     }
 
     public QLearning() {
-        this(1.0, 0.8);
+        this(1.0, 0.8, 0.25);
     }
 
     public double getQValue(Tuple<State, Direction> key) {
@@ -77,7 +80,7 @@ public class QLearning implements Serializable {
      * @param st the state to analyze
      * @return the best move or none if there are no valid moves
      */
-    public Optional<Direction> computeBestAction(State st) {
+    private Optional<Direction> computeBestAction(State st) {
         Direction[] dirs = st.getLegalActions();
         if (dirs.length == 0) {
             return Optional.empty();
@@ -98,6 +101,23 @@ public class QLearning implements Serializable {
             throw new RuntimeException("This shouldn't ever happen. Direction should be non-zero length");
         }
         return Optional.of(bestDir);
+    }
+
+    public Direction getMove(State st) {
+        Random random = new Random();
+        Direction[] allLegalDirs = st.getLegalActions();
+
+        // random choice in case q learning didn't return anything
+        Direction choice = allLegalDirs[random.nextInt(allLegalDirs.length)];
+
+        Optional<Direction> d = computeBestAction(st);
+
+        if (d.isPresent() && random.nextDouble() > epsilon) {
+            //System.out.println("Got direction: " + d.get());
+            choice = d.get();
+        }
+
+        return choice;
     }
 
     /**

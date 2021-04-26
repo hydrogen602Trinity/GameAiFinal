@@ -2,7 +2,6 @@ package students;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.Random;
 
 import snakes.Bot;
 import snakes.Coordinate;
@@ -14,11 +13,8 @@ import students.qLearning.Tuple;
 import students.qLearning.UtilStuff;
 
 public class QLearningBot implements Bot, Serializable {
-    private static final Direction[] DIRECTIONS = new Direction[] {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
 
-    private QLearning qStuff;
-    private Random random;
-    
+    private QLearning qStuff;    
 
     public QLearningBot() {
         Optional<QLearning> perhabs = UtilStuff.readObject("q.bin");
@@ -30,7 +26,6 @@ public class QLearningBot implements Bot, Serializable {
             qStuff = new QLearning();
         }
 
-        random = new Random();
     }
 
 
@@ -39,15 +34,8 @@ public class QLearningBot implements Bot, Serializable {
         qStuff.test += 1;
         State st = new BasicState(snake, opponent, mazeSize, apple);
 
-        Optional<Direction> d = qStuff.computeBestAction(st);
+        Direction choice = qStuff.getMove(st);
 
-        // random choice in case q learning didn't return anything
-        Direction choice = DIRECTIONS[random.nextInt(DIRECTIONS.length)];
-
-        if (d.isPresent()) {
-            System.out.println("Got direction: " + d.get());
-            choice = d.get();
-        }
 
         Tuple<Double, State> out = getValueAndState(snake, opponent, mazeSize, apple, choice);
         double moveScore = out._0;
