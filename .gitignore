@@ -11,3 +11,7 @@ logs*
 
 # q learning data
 q.bin
+
+# auto runner
+snakes-game-tutorial.jar
+autorunner.log

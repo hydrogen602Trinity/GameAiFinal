@@ -16,6 +16,7 @@ public class UtilStuff {
 
     public static <T> void writeObject(T st, String file) {
         //https://stackoverflow.com/questions/17293991/how-to-write-and-read-java-serialized-objects-into-a-file
+        //https://stackoverflow.com/questions/4409100/how-to-make-a-java-generic-method-static
 
         ObjectOutputStream oos = null;
         FileOutputStream fout = null;
