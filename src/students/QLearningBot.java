@@ -41,7 +41,7 @@ public class QLearningBot implements Bot, Serializable {
         double moveScore = out._0;
         State nextSt = out._1;
 
-        System.out.println("Value of move is: " + moveScore);
+        //System.out.println("Value of move is: " + moveScore);
 
         qStuff.updateQValue(st, choice, nextSt, moveScore);
 
@@ -82,7 +82,7 @@ public class QLearningBot implements Bot, Serializable {
     public void cleanup(int winner) {
         // TODO Auto-generated method stub
 
-        qStuff.debug();
+        //qStuff.debug();
         System.out.println("Debug counter: " + qStuff.test);
 
         UtilStuff.writeObject(qStuff, "q.bin");

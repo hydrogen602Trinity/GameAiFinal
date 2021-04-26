@@ -232,11 +232,11 @@ public class SnakeGame {
      */
     public void run() throws InterruptedException {
         while (runOneStep())
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                return;
-            }
+            // try {
+            //     Thread.sleep(1000); // turn off for training
+            // } catch (InterruptedException e) {
+            //     return;
+            // }
 
         output(gameResult);
     }

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import subprocess
 import sys
+import time
 
 # remember to export the jar
 
@@ -17,8 +18,22 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         n = int(sys.argv[1])
     
-    print(f"Running {n} batch{'es' if n > 1 else ''} of 5")
+    #print(f"Running {n} batch{'es' if n > 1 else ''} of 5")
+    print(f"Running for {n} minute{'s' if n > 1 else ''}")
     
+    seconds = n * 60
+    startTime = time.time()
+    runs = 0
+    counter = 0
     with open('autorunner.log', 'w') as f:
-        for _ in range(n):
-            runOnce(f)
+        try:
+            while time.time() - startTime < seconds:
+                runOnce(f)
+                runs += 5
+                counter += 1
+                print(f'\r{int(time.time() - startTime)}: {("x" * counter)}', end='', flush=True)
+        except KeyboardInterrupt:
+            pass
+    
+    print(f'ran {runs} times')
+    

@@ -25,6 +25,9 @@ public class UtilStuff {
             fout = new FileOutputStream(file, false);
             oos = new ObjectOutputStream(fout);
             oos.writeObject(st);
+        } catch (NotSerializableException e) {
+            e.printStackTrace();
+            System.exit(1);
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -47,6 +50,14 @@ public class UtilStuff {
             objectinputstream = new ObjectInputStream(streamIn);
             T readCase = (T) objectinputstream.readObject();
             return Optional.of(readCase);
+        } catch (FileNotFoundException e) {
+            System.err.println("Cannot find file");
+            return Optional.empty();
+        } 
+        catch (NotSerializableException e) {
+            e.printStackTrace();
+            System.exit(1);
+            return Optional.empty();
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();

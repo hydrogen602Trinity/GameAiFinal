@@ -10,7 +10,7 @@ import snakes.Snake;
 
 public class BasicState implements State, Serializable {
     
-    //private Coordinate appleRel;
+    private Coordinate appleRel;
 
     private int[] wallDistance;
 
@@ -18,7 +18,7 @@ public class BasicState implements State, Serializable {
 
     public BasicState(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
         Coordinate center = snake.getHead();
-        //this.appleRel = new Coordinate(apple.x - center.x, apple.y - center.y);
+        this.appleRel = new Coordinate(apple.x - center.x, apple.y - center.y);
 
         wallDistance = new int[4];
         wallDistance[0] = center.x;
@@ -68,7 +68,7 @@ public class BasicState implements State, Serializable {
     public boolean equals(Object o) {
         if (o instanceof BasicState) {
             BasicState st = (BasicState) o;
-            return /*appleRel.equals(st.appleRel) && */
+            return appleRel.equals(st.appleRel) && //*/
                 wallDistance[0] == st.wallDistance[0] && 
                 wallDistance[1] == st.wallDistance[1] && 
                 wallDistance[2] == st.wallDistance[2] && 
