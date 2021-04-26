@@ -1,4 +1,4 @@
-package johndoe;
+package students;
 
 import snakes.Bot;
 import snakes.Coordinate;
@@ -54,5 +54,11 @@ public class SampleBot implements Bot {
         if (notLosing.length > 0) return notLosing[0];
         else return validMoves[0];
         /* Cannot avoid losing here */
+    }
+
+    @Override
+    public void cleanup(int winner) {
+        // TODO Auto-generated method stub
+        
     }
 }

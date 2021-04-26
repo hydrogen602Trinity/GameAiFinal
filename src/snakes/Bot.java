@@ -16,5 +16,7 @@ public interface Bot {
      * @return Direction in which snake should crawl next game step
      */
     public Direction chooseDirection(final Snake snake, final Snake opponent, final Coordinate mazeSize, final Coordinate apple);
+
+    public void cleanup(int winner);
 }
 

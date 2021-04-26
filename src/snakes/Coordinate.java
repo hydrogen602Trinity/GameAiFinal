@@ -1,11 +1,12 @@
 package snakes;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Implements coordinate of a cell on the game boar
  */
-public class Coordinate implements Comparable<Coordinate> {
+public class Coordinate implements Comparable<Coordinate>, Serializable {
     public final int x, y;
 
     public Coordinate(int x, int y) {

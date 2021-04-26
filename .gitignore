@@ -7,4 +7,11 @@ out
 results.txt
 production/
 *.iws
-logs
+logs*
+
+# q learning data
+q.bin
+
+# auto runner
+snakes-game-tutorial.jar
+autorunner.log
