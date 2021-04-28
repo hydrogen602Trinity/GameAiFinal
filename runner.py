@@ -31,9 +31,12 @@ if __name__ == "__main__":
                 runOnce(f)
                 runs += 5
                 counter += 1
-                print(f'\r{int(time.time() - startTime)}: {("x" * counter)}', end='', flush=True)
+
+                timeFracDone = int((time.time() - startTime) / seconds * 100)
+                bar = f'[{("=" * timeFracDone)}>{(" " * (100 - timeFracDone))}]'
+                print(f'\rTime elapsed: {int(time.time() - startTime):5} seconds, runs completed: {runs:10} {bar}', end='', flush=True)
         except KeyboardInterrupt:
             pass
-    
-    print(f'ran {runs} times')
+    print()
+    print(f'Ran {runs} times')
     
