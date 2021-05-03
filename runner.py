@@ -12,6 +12,12 @@ def runOnce(f):
     f.write(s.stderr.decode())
 
 
+def getWidth():
+    s = subprocess.run(['tput', 'cols'], capture_output=True)
+    s.check_returncode()
+    return int(s.stdout.decode().strip())
+
+
 if __name__ == "__main__":
     print(sys.argv)
     n = 1
@@ -20,6 +26,10 @@ if __name__ == "__main__":
     
     #print(f"Running {n} batch{'es' if n > 1 else ''} of 5")
     print(f"Running for {n} minute{'s' if n > 1 else ''}")
+
+    width = getWidth()
+
+    print('-' * width)
     
     seconds = n * 60
     startTime = time.time()
@@ -32,9 +42,15 @@ if __name__ == "__main__":
                 runs += 5
                 counter += 1
 
-                timeFracDone = int((time.time() - startTime) / seconds * 100)
-                bar = f'[{("=" * timeFracDone)}>{(" " * (100 - timeFracDone))}]'
-                print(f'\rTime elapsed: {int(time.time() - startTime):5} seconds, runs completed: {runs:10} {bar}', end='', flush=True)
+                #width = getWidth()
+
+                data = f'Time elapsed: {int(time.time() - startTime):5} seconds, runs completed: {runs:10} '
+                spacing = len(data) + 3
+
+                spaceLeft = width - spacing
+                timeFracDone = int((time.time() - startTime) / seconds * spaceLeft)
+                bar = f'[{("=" * timeFracDone)}>{(" " * (spaceLeft - timeFracDone))}]'
+                print(f'\r{data}{bar}', end='', flush=True)
         except KeyboardInterrupt:
             pass
     print()

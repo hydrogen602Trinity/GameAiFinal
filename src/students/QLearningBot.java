@@ -27,12 +27,12 @@ public class QLearningBot implements Bot, Serializable {
             qStuff = new QLearning();
         }
 
+        qStuff.test += 1;
     }
 
 
     @Override
     public Direction chooseDirection(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
-        qStuff.test += 1;
         State st = new AppleState(snake, opponent, mazeSize, apple);
 
         Direction choice = qStuff.getMove(st);

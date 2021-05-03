@@ -23,7 +23,6 @@ public class QLearning implements Serializable {
         this.alpha = alpha;
         this.discount = discount;
         this.epsilon = epsilon;
-        test = 0;
     }
 
     public void debug() {

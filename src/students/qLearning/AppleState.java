@@ -16,18 +16,22 @@ public class AppleState implements State, Serializable {
 
     private Direction facing;
 
+    private static boolean isLethal(Snake sn, Snake sn2, Coordinate pos, Coordinate mazeSize) {
+        return sn.elements.contains(pos) || sn2.elements.contains(pos) || !pos.inBounds(mazeSize);
+    }
+
     public AppleState(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
         Coordinate center = snake.getHead();
         this.appleRel = new Coordinate(apple.x - center.x, apple.y - center.y);
-
-        nextToWall = new boolean[4];
-        nextToWall[0] = center.x == 0;
-        nextToWall[1] = center.y == 0;
-        nextToWall[2] = mazeSize.x - center.x == 0;
-        nextToWall[3] = mazeSize.y - center.y == 0;
-
+        
         // get all directions but backward cause thats illegal.
         Coordinate head = snake.getHead();
+
+        nextToWall = new boolean[4];
+        nextToWall[0] = isLethal(snake, opponent, head.moveTo(Direction.UP), mazeSize); //center.x == 0;
+        nextToWall[1] = isLethal(snake, opponent, head.moveTo(Direction.DOWN), mazeSize);
+        nextToWall[2] = isLethal(snake, opponent, head.moveTo(Direction.RIGHT), mazeSize);
+        nextToWall[3] = isLethal(snake, opponent, head.moveTo(Direction.LEFT), mazeSize);
 
         /* Get the coordinate of the second element of the snake's body
             * to prevent going backwards */
