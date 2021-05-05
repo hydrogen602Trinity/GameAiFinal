@@ -6,7 +6,7 @@ import time
 # remember to export the jar
 
 def runOnce(f):
-    s = subprocess.run(['java', '-jar', 'snakes-game-tutorial.jar', 'students.SampleBot', 'students.QLearningBot'], capture_output=True)
+    s = subprocess.run(['java', '-jar', 'GameAiFinal.jar', 'students.SampleBot', 'students.QLearningBot'], capture_output=True)
     s.check_returncode()
     f.write(s.stdout.decode())
     f.write(s.stderr.decode())

@@ -106,7 +106,7 @@ public class SnakesUIMain {
                 Bot bot0 = bots.get(i).getConstructor().newInstance();
                 Bot bot1 = bots.get(bots.size() - i - 1).getConstructor().newInstance();
                 SnakeGame game = new SnakeGame(mazeSize, head0, tailDirection0, head1, tailDirection1, snakeSize, bot0, bot1);
-                SnakesWindowless window = new SnakesWindowless(game); //SnakesWindowless
+                SnakesWindow window = new SnakesWindow(game); //SnakesWindowless
                 Thread t = new Thread(window);
                 t.start();
                 t.join();

@@ -9,7 +9,7 @@
             "name": "Launch SnakesUIMain",
             "request": "launch",
             "mainClass": "snakes.SnakesUIMain",
-            "projectName": "snakes-game-tutorial_4cc99e8d",
+            "projectName": "GameAiFinal_a3d88ed1",
             "args": ["students.SampleBot", "students.QLearningBot"]
         }
     ]
