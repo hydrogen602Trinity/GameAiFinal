@@ -15,3 +15,4 @@ logs*
 # auto runner
 snakes-game-tutorial.jar
 autorunner.log
+/bin/
