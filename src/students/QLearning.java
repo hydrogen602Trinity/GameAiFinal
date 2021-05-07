@@ -25,6 +25,10 @@ public class QLearning implements Serializable {
         this.epsilon = epsilon;
     }
 
+    public void setEpsilon(double epsilon) {
+        this.epsilon = epsilon;
+    }
+
     public void debug() {
         System.out.println("{");
         for (Tuple<State, Direction> key: qValues.keySet()) {

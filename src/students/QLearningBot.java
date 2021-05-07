@@ -30,6 +30,10 @@ public class QLearningBot implements Bot, Serializable {
         qStuff.test += 1;
     }
 
+    public void setEpsilon(double epsilon) {
+        qStuff.setEpsilon(epsilon);
+    }
+
 
     @Override
     public Direction chooseDirection(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {

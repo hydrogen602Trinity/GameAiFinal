@@ -2,11 +2,13 @@
 import subprocess
 import sys
 import time
+import pathlib
 
 # remember to export the jar
 
 def runOnce(f):
-    s = subprocess.run(['java', '-jar', 'GameAiFinal.jar', 'students.SampleBot', 'students.QLearningBot'], capture_output=True)
+    # /usr/bin/env /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+    s = subprocess.run(['/usr/bin/env', '/usr/lib/jvm/java-11-openjdk-amd64/bin/java', '-jar', 'GameAiFinal.jar', 'students.SampleBot', 'students.QLearningBot'], capture_output=True)
     s.check_returncode()
     f.write(s.stdout.decode())
     f.write(s.stderr.decode())
@@ -35,6 +37,7 @@ if __name__ == "__main__":
     startTime = time.time()
     runs = 0
     counter = 0
+    currentHour = 0
     with open('autorunner.log', 'w') as f:
         try:
             while time.time() - startTime < seconds:
@@ -51,6 +54,13 @@ if __name__ == "__main__":
                 timeFracDone = int((time.time() - startTime) / seconds * spaceLeft)
                 bar = f'[{("=" * timeFracDone)}>{(" " * (spaceLeft - timeFracDone))}]'
                 print(f'\r{data}{bar}', end='', flush=True)
+
+                if (time.time() - startTime) // (60 * 60) > currentHour:
+                    currentHour += 1
+                    s = subprocess.run(['cp', 'q.bin', f'q_{currentHour}.bin'])
+                    s.check_returncode()
+                    
+
         except KeyboardInterrupt:
             pass
     print()
