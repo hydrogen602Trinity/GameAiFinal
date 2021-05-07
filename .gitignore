@@ -8,6 +8,8 @@ results.txt
 production/
 *.iws
 logs*
+*.log
+*.jar
 
 # q learning data
 *.bin

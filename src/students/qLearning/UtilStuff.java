@@ -32,9 +32,11 @@ public class UtilStuff {
             ex.printStackTrace();
         } finally {
             try {
-                if(oos != null){
-                    oos.close();
-                } 
+                oos.flush();
+                oos.close();
+
+                fout.flush();
+                fout.close();
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -60,7 +62,7 @@ public class UtilStuff {
             return Optional.empty();
         } catch (Exception e) {
             e.printStackTrace();
-            return Optional.empty();
+            throw new RuntimeException("yeet");
         } finally {
             try {
                 if(objectinputstream != null){
