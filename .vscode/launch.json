@@ -9,24 +9,30 @@
             "name": "Launch welp",
             "request": "launch",
             "mainClass": "debug.welp",
-            "projectName": "GameAiFinal"
-        },
-        {
-            "type": "java",
-            "name": "Launch welp",
-            "request": "launch",
-            "mainClass": "debug.welp",
             "projectName": "GameAiFinal_a3d88ed1"
         },
         {
             "type": "java",
-            "name": "Launch SnakesUIMain",
+            "name": "Launch Window",
             "request": "launch",
             "mainClass": "snakes.SnakesUIMain",
             "projectName": "GameAiFinal_a3d88ed1",
             "args": [
                 "students.SampleBot",
-                "students.QLearningBot"
+                "students.QLearningBot",
+                "true"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Launch Windowless",
+            "request": "launch",
+            "mainClass": "snakes.SnakesUIMain",
+            "projectName": "GameAiFinal_a3d88ed1",
+            "args": [
+                "students.SampleBot",
+                "students.QLearningBot",
+                "false"
             ]
         }
     ]

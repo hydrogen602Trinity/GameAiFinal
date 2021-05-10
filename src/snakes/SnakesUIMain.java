@@ -84,7 +84,7 @@ public class SnakesUIMain {
      * @throws InterruptedException Threads handler
      * @throws IOException FileWriter handler
      */
-    public static void start_round_robin_tournament(ArrayList<Class<? extends Bot>> bots, boolean window) throws InterruptedException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static void start_round_robin_tournament(ArrayList<Class<? extends Bot>> bots, boolean doWindow) throws InterruptedException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // init game settings
         Coordinate mazeSize = new Coordinate(14, 14);
         Coordinate head0 = new Coordinate(2, 2);
@@ -120,7 +120,7 @@ public class SnakesUIMain {
                 Bot bot1 = bots.get(bots.size() - i - 1).getConstructor().newInstance();
                 SnakeGame game = new SnakeGame(mazeSize, head0, tailDirection0, head1, tailDirection1, snakeSize, bot0, bot1);
                 
-                SnakesWindowless window = (window) ? new SnakesWindow(game) : new SnakesWindowless(game); //SnakesWindowless
+                SnakesWindowless window = (doWindow) ? new SnakesWindow(game) : new SnakesWindowless(game); //SnakesWindowless
                 Thread t = new Thread(window);
                 t.start();
                 t.join();
