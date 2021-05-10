@@ -1,5 +1,8 @@
 {
     "java.project.sourcePaths": [
         "src"
+    ],
+    "java.project.referencedLibraries": [
+        "/home/jonathan/Documents/lib/*.jar"
     ]
 }
