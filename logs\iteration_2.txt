@@ -1,0 +1,6 @@
+SampleBot vs QLearningBot : 1 - 0 (Time taken: 2.283)
+
+-------------------------------------------
+
+Class earned: 1
+Class earned: 0
