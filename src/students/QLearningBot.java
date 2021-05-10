@@ -7,6 +7,7 @@ import snakes.Bot;
 import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
+import students.qLearning.AStarState;
 import students.qLearning.AppleState;
 //import students.qLearning.BasicState;
 import students.qLearning.State;
@@ -37,7 +38,7 @@ public class QLearningBot implements Bot, Serializable {
 
     @Override
     public Direction chooseDirection(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
-        State st = new AppleState(snake, opponent, mazeSize, apple);
+        State st = new AStarState(snake, opponent, mazeSize, apple);
 
         Direction choice = qStuff.getMove(st);
 

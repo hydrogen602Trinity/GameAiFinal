@@ -3,9 +3,13 @@ package students.qLearning;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
+import game.TPoint;
 import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
@@ -14,6 +18,8 @@ public class AStarState implements State, Serializable{
 
 	private Coordinate appleRel;
 
+    private boolean[] nextToWall;
+    
     private int[] wallDistance;
 
     private Direction facing;
@@ -22,16 +28,15 @@ public class AStarState implements State, Serializable{
         Coordinate center = snake.getHead();
         this.appleRel = new Coordinate(apple.x - center.x, apple.y - center.y);
 
-        Coordinate current = null;
-        
-        wallDistance = new int[4];
-        wallDistance[0] = center.x;
-        wallDistance[1] = center.y;
-        wallDistance[2] = mazeSize.x - center.x;
-        wallDistance[3] = mazeSize.y - center.y;
-
-        // get all directions but backward cause thats illegal.
         Coordinate head = snake.getHead();
+        
+        nextToWall = new boolean[4];
+        nextToWall[0] = isLethal(snake, opponent, head.moveTo(Direction.UP), mazeSize); //center.x == 0;
+        nextToWall[1] = isLethal(snake, opponent, head.moveTo(Direction.DOWN), mazeSize);
+        nextToWall[2] = isLethal(snake, opponent, head.moveTo(Direction.RIGHT), mazeSize);
+        nextToWall[3] = isLethal(snake, opponent, head.moveTo(Direction.LEFT), mazeSize);
+
+        
         
         Coordinate enemy = opponent.getHead();
         Direction endir = enemy.getDirection(enemy);
@@ -49,22 +54,49 @@ public class AStarState implements State, Serializable{
         if (afterHeadNotFinal != null) {
             facing = afterHeadNotFinal.getDirection(head);
         }
-        
-       Direction[] validMoves = getLegalActions();
-       boolean found = false;
-       int rel = 0;
-       while(!found) {
-    	   
-    	   if(appleRel.x + rel == center.x || appleRel.y + rel == center.y) {
-    		   found = true;
-    			   facing = mazeSize.getDirection(appleRel);
-    	   }else {
-    		   rel++;
-    	   }
-       }
-       
-   
+       facing = getMove(snake, apple);
+  
 		
+    }
+    
+    private Direction getMove(Snake snake, Coordinate apple) {
+    	double count = 0;
+    	
+    	HashMap<Double,Direction> moves = new HashMap<Double, Direction>();
+    	
+    	ArrayList<Coordinate> neighbours = getNearCoordinates(snake.getHead());
+    	
+    	for(Coordinate c: neighbours) {
+    		double st = steps(apple, c);
+    		if(st < count)
+    			count = st;
+    	}
+    	
+    	
+    	return moves.get(count);
+    	
+    	
+    	
+    }
+    
+    public double steps(Coordinate a, Coordinate b) {
+    	return Math.abs(Math.sqrt(b.x - a.x))+ Math.sqrt((b.y - a.y));
+    }
+    
+    
+    
+    ArrayList<Coordinate> getNearCoordinates(Coordinate origin) {
+        ArrayList<Coordinate> neighbours = new ArrayList<>();
+        
+        Direction[] validMoves =getLegalActions();
+        for(Direction d: validMoves)
+        	neighbours.add(origin.moveTo(d));
+
+        return neighbours;
+    }
+    
+    private static boolean isLethal(Snake sn, Snake sn2, Coordinate pos, Coordinate mazeSize) {
+        return sn.elements.contains(pos) || sn2.elements.contains(pos) || !pos.inBounds(mazeSize);
     }
 
     /**
