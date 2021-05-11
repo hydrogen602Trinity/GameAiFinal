@@ -17,7 +17,7 @@ public class QLearningBot implements Bot, Serializable {
     private QLearning qStuff;    
 
     public QLearningBot() {
-        String stateName = "AppleState";
+        String stateName = "AStarState";
         Optional<QLearning> perhabs = UtilStuff.readObject("q_" + stateName + ".bin");
 
         if (perhabs.isPresent()) {

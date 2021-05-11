@@ -13,7 +13,7 @@ public class welp {
         ObjectInputStream objectinputstream = null;
         FileInputStream streamIn = null;
         try {
-            streamIn = new FileInputStream("q_4.bin");
+            streamIn = new FileInputStream("q_AppleState_1.bin");
             System.out.println(streamIn);
             objectinputstream = new ObjectInputStream(streamIn);
             System.out.println(objectinputstream);

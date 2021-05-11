@@ -9,6 +9,13 @@
             "name": "Launch welp",
             "request": "launch",
             "mainClass": "debug.welp",
+            "projectName": "GameAiFinal"
+        },
+        {
+            "type": "java",
+            "name": "Launch welp",
+            "request": "launch",
+            "mainClass": "debug.welp",
             "projectName": "GameAiFinal_a3d88ed1"
         },
         {
