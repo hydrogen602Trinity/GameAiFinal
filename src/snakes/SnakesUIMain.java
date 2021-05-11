@@ -21,8 +21,9 @@ public class SnakesUIMain {
      * @throws IOException  FileWriter handler
      */
     public static void main(String[] args) throws InterruptedException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        if (args.length < 2) {
+        if (args.length < 3) {
             System.err.println("You must provide two classes implementing the Bot interface.");
+            System.err.println("Plus a true/false for window or not");
             System.exit(1);
         }
 
@@ -32,7 +33,19 @@ public class SnakesUIMain {
         bots.add(loader.getBotClass(args[0]));
         bots.add(loader.getBotClass(args[1]));
 
-        start_tournament_n_times(5, bots);
+        boolean window = false;
+        if (args[2].equals("true")) {
+            window = true;
+        }
+        else if (args[2].equals("false")) {
+            window = false;
+        }
+        else {
+            System.err.println("Expected true or false, but got: " + args[2]);
+            System.exit(1);
+        }
+
+        start_tournament_n_times(5, bots, window);
     }
 
     /**
@@ -42,7 +55,7 @@ public class SnakesUIMain {
      * @throws IOException FileWriter handler
      * @throws InterruptedException Threads handler
      */
-    public static void start_tournament_n_times(int n, ArrayList<Class<? extends Bot>> bots) throws IOException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public static void start_tournament_n_times(int n, ArrayList<Class<? extends Bot>> bots, boolean window) throws IOException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         total_results_table = new int[bots.size() + 1][bots.size() + 1];
         File dir = new File(LOG_DIRECTORY_PATH);
         if (!dir.exists() && !dir.mkdirs()) {
@@ -51,7 +64,7 @@ public class SnakesUIMain {
         for (int i = 0; i < n; i++) {
             System.out.println("\nTournament iteration number " + i + "\n");
             results_fw = new FileWriter(String.format("%s\\iteration_%d.txt", LOG_DIRECTORY_PATH, i), false);
-            start_round_robin_tournament(bots);
+            start_round_robin_tournament(bots, window);
             results_fw.close();
         }
 
@@ -71,7 +84,7 @@ public class SnakesUIMain {
      * @throws InterruptedException Threads handler
      * @throws IOException FileWriter handler
      */
-    public static void start_round_robin_tournament(ArrayList<Class<? extends Bot>> bots) throws InterruptedException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static void start_round_robin_tournament(ArrayList<Class<? extends Bot>> bots, boolean doWindow) throws InterruptedException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // init game settings
         Coordinate mazeSize = new Coordinate(14, 14);
         Coordinate head0 = new Coordinate(2, 2);
@@ -106,7 +119,8 @@ public class SnakesUIMain {
                 Bot bot0 = bots.get(i).getConstructor().newInstance();
                 Bot bot1 = bots.get(bots.size() - i - 1).getConstructor().newInstance();
                 SnakeGame game = new SnakeGame(mazeSize, head0, tailDirection0, head1, tailDirection1, snakeSize, bot0, bot1);
-                SnakesWindow window = new SnakesWindow(game); //SnakesWindowless
+                
+                SnakesWindowless window = (doWindow) ? new SnakesWindow(game) : new SnakesWindowless(game); //SnakesWindowless
                 Thread t = new Thread(window);
                 t.start();
                 t.join();

@@ -8,7 +8,7 @@ import pathlib
 
 def runOnce(f):
     # /usr/bin/env /usr/lib/jvm/java-11-openjdk-amd64/bin/java
-    s = subprocess.run(['/usr/bin/env', '/usr/lib/jvm/java-11-openjdk-amd64/bin/java', '-jar', 'GameAiFinal.jar', 'students.SampleBot', 'students.QLearningBot'], capture_output=True)
+    s = subprocess.run(['/usr/bin/env', '/usr/lib/jvm/java-11-openjdk-amd64/bin/java', '-jar', 'GameAiFinal.jar', 'students.SampleBot', 'students.QLearningBot', 'false'], capture_output=True)
     s.check_returncode()
     f.write(s.stdout.decode())
     f.write(s.stderr.decode())
@@ -23,8 +23,11 @@ def getWidth():
 if __name__ == "__main__":
     print(sys.argv)
     n = 1
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         n = int(sys.argv[1])
+        st = int(sys.argv[2])
+    else:
+        assert None
     
     #print(f"Running {n} batch{'es' if n > 1 else ''} of 5")
     print(f"Running for {n} minute{'s' if n > 1 else ''}")
@@ -57,7 +60,7 @@ if __name__ == "__main__":
 
                 if (time.time() - startTime) // (60 * 60) > currentHour:
                     currentHour += 1
-                    s = subprocess.run(['cp', 'q.bin', f'q_{currentHour}.bin'])
+                    s = subprocess.run(['cp', f'q_{st}.bin', f'q_{st}_{currentHour}.bin'])
                     s.check_returncode()
                     
 
