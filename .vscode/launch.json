@@ -9,13 +9,6 @@
             "name": "Launch welp",
             "request": "launch",
             "mainClass": "debug.welp",
-            "projectName": "GameAiFinal"
-        },
-        {
-            "type": "java",
-            "name": "Launch welp",
-            "request": "launch",
-            "mainClass": "debug.welp",
             "projectName": "GameAiFinal_a3d88ed1"
         },
         {
@@ -27,6 +20,18 @@
             "args": [
                 "students.SampleBot",
                 "students.QLearningBot",
+                "true"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Launch A*",
+            "request": "launch",
+            "mainClass": "snakes.SnakesUIMain",
+            "projectName": "GameAiFinal_a3d88ed1",
+            "args": [
+                "students.SampleBot",
+                "students.AStarBot",
                 "true"
             ]
         },
