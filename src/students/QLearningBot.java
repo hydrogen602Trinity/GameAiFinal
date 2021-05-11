@@ -14,7 +14,8 @@ import students.qLearning.UtilStuff;
 
 public class QLearningBot implements Bot, Serializable {
 
-    private QLearning qStuff;    
+    private QLearning qStuff;
+    private boolean displayMode = false; // no exploration
 
     public QLearningBot() {
         String stateName = "AStarState";
@@ -33,18 +34,25 @@ public class QLearningBot implements Bot, Serializable {
         qStuff.test += 1;
     }
 
+    public void setDisplayMode() {
+        displayMode = true;
+    }
+
     public void setEpsilon(double epsilon) {
         qStuff.setEpsilon(epsilon);
     }
-
 
     @Override
     public Direction chooseDirection(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
         State st = StateFactory.create(qStuff.getStateName(), snake, opponent, mazeSize, apple);
         //new AppleState(snake, opponent, mazeSize, apple);
 
-        Direction choice = qStuff.getMove(st);
+        if (displayMode) {
+            Direction choice = qStuff.getOptimalMove(st);
+            return choice;
+        }
 
+        Direction choice = qStuff.getMove(st);
 
         Tuple<Double, State> out = getValueAndState(snake, opponent, mazeSize, apple, choice);
         double moveScore = out._0;

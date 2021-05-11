@@ -1,9 +1,10 @@
 package students.qLearning;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+// import java.util.HashMap;
+import java.util.Iterator;
 
 import snakes.Coordinate;
 import snakes.Direction;
@@ -14,6 +15,8 @@ public class AStarState implements State, Serializable {
     private boolean[] nextToWall;
 
     private Direction appleDir;
+
+    private Direction facing;
 
     public AStarState(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
         Coordinate head = snake.getHead();
@@ -30,41 +33,63 @@ public class AStarState implements State, Serializable {
          * backwards
          */
 
-        appleDir = getMove(snake, apple);
+        Coordinate afterHeadNotFinal = null;
+        if (snake.body.size() >= 2) {
+            Iterator<Coordinate> it = snake.body.iterator();
+            it.next();
+            afterHeadNotFinal = it.next();
+        }
 
+        facing = null;
+        if (afterHeadNotFinal != null) {
+            facing = afterHeadNotFinal.getDirection(head);
+        }
+
+        appleDir = getMove(snake, apple);
+        if (appleDir == null) {
+            throw new NullPointerException("Apple direction is null");
+        }
     }
 
     private Direction getMove(Snake snake, Coordinate apple) {
-        double count = 0;
-        ArrayList<Coordinate> neighbours = new ArrayList<>();
-        HashMap<Double, Direction> score = new HashMap<Double, Direction>();
-        neighbours.add(snake.getHead());
-        while (!neighbours.isEmpty()) {
-            ArrayList<Coordinate> check = new ArrayList<>();
-            check = getNearCoordinates(snake.getHead());
-            for (Coordinate c : check) {
-                double dist = calcDist(c, apple);
-                Direction d = snake.getHead().getDirection(apple);
-                score.put(dist, d);
-                if (dist < count)
-                    count = dist;
+        // double count = 0;
+        // ArrayList<Coordinate> neighbours = new ArrayList<>();
+        // HashMap<Double, Direction> score = new HashMap<Double, Direction>();
+        // neighbours.add(snake.getHead());
+        // while (!neighbours.isEmpty()) {
+            // ArrayList<Coordinate> check = new ArrayList<>();
+            // check = getNearCoordinates(snake.getHead());
+        
+        double bestDis = Double.POSITIVE_INFINITY;
+        Direction bestDir = null;
+        for (Direction d : getLegalActions()) {
+            Coordinate c = snake.getHead().moveTo(d);
+            double dist = calcDist(c, apple);
+            // Direction d = snake.getHead().getDirection(apple); doesnt work
 
+            // score.put(dist, d);
+            if (dist < bestDis) {
+                bestDis = dist;
+                bestDir = d;
             }
-            neighbours.remove(0);
+                
+
         }
+            // neighbours.remove(0);
+        // }
 
-        return score.get(count);
+        return bestDir; // score.get(count);
 
     }
 
-    ArrayList<Coordinate> getNearCoordinates(Coordinate origin) {
-        ArrayList<Coordinate> neighbours = new ArrayList<>();
-        Direction[] validMoves = getLegalActions();
-        for (Direction direction : validMoves)
-            neighbours.add(origin.moveTo(direction));
+    // private ArrayList<Coordinate> getNearCoordinates(Coordinate origin) {
+    //     ArrayList<Coordinate> neighbours = new ArrayList<>();
+    //     Direction[] validMoves = getLegalActions();
+    //     for (Direction direction : validMoves)
+    //         neighbours.add(origin.moveTo(direction));
 
-        return neighbours;
-    }
+    //     return neighbours;
+    // }
 
     /**
      * Computes and returns an array of all valid moves from the current state
@@ -84,7 +109,7 @@ public class AStarState implements State, Serializable {
     public Direction[] getLegalActions() {
         Direction[] dirs = { Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT };
 
-        Direction backwards = UtilStuff.getInverseDir(appleDir);
+        Direction backwards = UtilStuff.getInverseDir(facing);
 
         /*
          * The only illegal move is going backwards. Here we are checking for not doing

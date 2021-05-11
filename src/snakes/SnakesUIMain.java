@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import students.QLearningBot;
+
 /**
  * Implements tournament of the snake game with several rounds
  */
@@ -118,6 +120,19 @@ public class SnakesUIMain {
                 // start the game between ith and N-i-1 bots
                 Bot bot0 = bots.get(i).getConstructor().newInstance();
                 Bot bot1 = bots.get(bots.size() - i - 1).getConstructor().newInstance();
+
+                if (bot0 instanceof QLearningBot) {
+                    if (doWindow) {
+                        ((QLearningBot) bot0).setDisplayMode();
+                    }
+                }
+
+                if (bot1 instanceof QLearningBot) {
+                    if (doWindow) {
+                        ((QLearningBot) bot0).setDisplayMode();
+                    }
+                }
+
                 SnakeGame game = new SnakeGame(mazeSize, head0, tailDirection0, head1, tailDirection1, snakeSize, bot0, bot1);
                 
                 SnakesWindowless window = (doWindow) ? new SnakesWindow(game) : new SnakesWindowless(game); //SnakesWindowless

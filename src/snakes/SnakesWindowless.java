@@ -24,15 +24,11 @@ public class SnakesWindowless implements Runnable {
         running = true;
         long startTime = System.currentTimeMillis();
         while(running) {
-            long t = System.currentTimeMillis();
-
             try {
                 running = game.runOneStep();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            long elapsed = System.currentTimeMillis() - t;
 
             // check for time limit
             if (System.currentTimeMillis() - startTime >= TIME_LIMIT_PER_GAME) {
