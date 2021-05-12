@@ -3,13 +3,20 @@ package students.qLearning;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
+import game.Point;
+import game.TPoint;
 import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
+import students.qLearning.Node;
+import students.qLearning.State;
 
 public class AStarState implements State, Serializable{
 
@@ -17,20 +24,15 @@ public class AStarState implements State, Serializable{
 
     private int[] wallDistance;
     private boolean[] nextToWall;
-
+    private boolean pathFound = false;
     private Direction facing;
-
+	private List<Node> path = new ArrayList<Node>();
+	private Queue<Direction> moves = new LinkedList<Direction>();
+	
     public AStarState(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
         Coordinate center = snake.getHead();
         this.appleRel = new Coordinate(apple.x - center.x, apple.y - center.y);
 
-        Coordinate current = null;
-        
-        wallDistance = new int[4];
-        wallDistance[0] = center.x;
-        wallDistance[1] = center.y;
-        wallDistance[2] = mazeSize.x - center.x;
-        wallDistance[3] = mazeSize.y - center.y;
         Coordinate head = snake.getHead();
         nextToWall = new boolean[4];
         nextToWall[0] = isLethal(snake, opponent, head.moveTo(Direction.UP), mazeSize); //center.x == 0;
@@ -40,54 +42,106 @@ public class AStarState implements State, Serializable{
 
 
         // get all directions but backward cause thats illegal.
-      
-        
-        Coordinate enemy = opponent.getHead();
-        Direction endir = enemy.getDirection(enemy);
 
-        /* Get the coordinate of the second element of the snake's body
-            * to prevent going backwards */
-        Coordinate afterHeadNotFinal = null;
-        if (snake.body.size() >= 2) {
-            Iterator<Coordinate> it = snake.body.iterator();
-            it.next();
-            afterHeadNotFinal = it.next();
-        }
-
-        facing = null;
-        if (afterHeadNotFinal != null) {
-            facing = afterHeadNotFinal.getDirection(head);
-        }
         
-        
-        facing = getMove(snake,apple);
+        facing = getMove(snake, opponent, mazeSize, apple);
        
    
 		
     }
-    private Direction getMove(Snake snake, Coordinate apple) {
-    	double count = 0;
-    	ArrayList<Coordinate> neighbours = new ArrayList<>();
-    	HashMap<Double, Direction> score = new HashMap<Double, Direction>();
-    	neighbours.add(snake.getHead());
-    	while(!neighbours.isEmpty()) {
-    		ArrayList<Coordinate> check = new ArrayList<>();
-    		check = getNearCoordinates(snake.getHead());
-    		for(Coordinate c: check) {
-    			double dist = calcDist(c, apple);
-    			Direction d = snake.getHead().getDirection(apple);
-    			score.put(dist, d);
-    			if(dist < count)
-    				count = dist;
-    		
-    		}
-    		neighbours.remove(0);
-    	}
-    	
-    	return score.get(count);
-    	
-    	
+    private Direction getMove(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
+
+    	Node current = null;
+    	Node goal = convertPoint(apple);
+    	Node last;
+		List<Node> openList = new ArrayList<Node>();
+		List<Node> closedList = new ArrayList<Node>();
+		List<Node> neighbors = new ArrayList<Node>();
+		
+		Direction move = Direction.DOWN;
+		
+		openList.add(convertPoint(snake.getHead()));
+		while(openList.size() > 0) {
+			last = current;
+			current = getsmallestElement(convertPoint(snake.getHead()), convertPoint(apple),openList);
+			if(current.x == apple.x && current.y == apple.y) {
+				goal.setParent(last);
+				break;
+			}
+			else {
+				neighbors = convertPoints(getNearCoordinates(current));
+				for(Node n: neighbors) {
+
+					double nDist = current.costsoFar + 1;//4.16
+					if(closedList.contains(n) || isLethal(snake, opponent, reversePoint(n), mazeSize)) {
+						if(n.costsoFar <= nDist)
+							continue;
+						else
+							closedList.remove(n);
+					n.cost = nDist - n.costsoFar;
+					}else if(openList.contains(n)){
+						if(n.costsoFar <= nDist)
+							continue;
+						n.cost = nDist - n.costsoFar;
+					} else{
+						n.cost = calcDist(n,goal);
+						n.costsoFar = calcDist(convertPoint(snake.getHead()), n);
+						n.setParent(current);
+						n.settotalCost(n.costsoFar + n.cost);
+						if(!openList.contains(n))
+						openList.add(n);
+						}
+					
+					}
+				closedList.add(current);
+				openList.remove(current);
+				}
+			
+			}
+		
+			if(current.x != apple.x && current.y != apple.y)
+					System.out.print("No Path can be found");
+			else{
+				pathFound = true;
+			
+			createPath(convertPoint(snake.getHead()),goal);
+			move = moves.remove();
+			}
+			
+		
+		return move;
+		
     }
+public void createPath(Node start, Node goal) {
+	//Boolean isDone= false;
+	Node pop = transfer(goal);
+	
+	while(!pop.equals(start)) {
+		path.add(pop);
+		pop = transfer(pop.parent);			
+	}
+	
+	Collections.reverse(path);	
+	path.add(0, start);
+	Direction thisMove = Direction.LEFT; 
+	int i =0;
+	int j = 1;
+	while(thisMove != null && path.size() !=1) {
+		thisMove = calcMove(path.get(i), path.get(i+1));
+		path.remove(0);
+		System.out.print(j);
+		moves.add(thisMove);
+		j++;
+	}
+}
+public Node transfer(Node a) {
+	int nx = a.x;
+	int ny = a.y;
+	Node newPoint = new Node(nx,ny,0,0);
+	newPoint.setParent(a.getParent());
+	return newPoint;
+}
+
     
     ArrayList<Coordinate> getNearCoordinates(Coordinate origin) {
         ArrayList<Coordinate> neighbours = new ArrayList<>();
@@ -97,6 +151,26 @@ public class AStarState implements State, Serializable{
 
         return neighbours;
     }
+	public List<Node> convertPoints(List<Coordinate> list){
+		List<Node> newPoints = new ArrayList<Node>();
+		for(Coordinate p: list) {
+			newPoints.add(convertPoint(p));
+		}
+		return newPoints;
+	}
+	public Node convertPoint(Coordinate p) {
+		int nx = p.x;
+		int ny = p.y;
+		Node newPoint = new Node(nx, ny, 0, 0);
+		return newPoint;
+		
+	}
+	public Coordinate reversePoint(Node t) {
+		int ox = t.x;
+		int oy = t.y;
+		Coordinate newPoint = new Coordinate(ox, oy);
+		return newPoint;
+	}
 
     /**
      * Computes and returns an array of all valid moves from the current state
@@ -111,6 +185,50 @@ public class AStarState implements State, Serializable{
     private static boolean isLethal(Snake sn, Snake sn2, Coordinate pos, Coordinate mazeSize) {
         return sn.elements.contains(pos) || sn2.elements.contains(pos) || !pos.inBounds(mazeSize);
     }
+	public Node getsmallestElement(Node start, Node goal, List<Node> list ) {
+		double f;
+		Node small = list.get(0);
+		for(Node t: list) {
+			f = getCostEstimate(start, t, goal);
+			t.settotalCost(f);
+		}
+		
+		for(int i = 0; i <= list.size()-1;i++) {
+			if(list.get(i).totalCost < small.totalCost || list.get(i).totalCost == small.totalCost) {
+					small = list.get(i);
+			}
+		}
+		return small;
+	}
+	public double getCostEstimate(Node start, Node now, Node goal) {
+		double f;
+		double g;
+		double h;
+		g = calcDist(start, now);
+		//now.setcostsoFar(g);
+		h = calcDist(now, goal);
+		//now.cost(h);
+		f = g+ h;
+		return f;
+
+	}
+	public Direction calcMove(Node a, Node b) {
+		//(a.x,a.y)  (b.x,b.y)
+		//(0,0)    (1,0) (0,1)
+		Direction mv = null;
+		
+		if(a.x - 1 == b.x && a.y==b.y)
+			mv = Direction.LEFT;
+		if(a.x + 1 == b.x && a.y==b.y)
+			mv = Direction.RIGHT;
+		if(a.x==b.x && a.y -1 == b.y)
+			mv = Direction.UP;
+		if(a.x==b.x && a.y +1 == b.y)
+			mv = Direction.DOWN;
+		
+		return mv;
+		
+	}
     
     public Direction[] getLegalActions() {
         Direction[] dirs = { Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT };
