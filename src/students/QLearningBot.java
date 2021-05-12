@@ -7,41 +7,62 @@ import snakes.Bot;
 import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
+<<<<<<< HEAD
 import students.qLearning.AStarState;
 import students.qLearning.AppleState;
 //import students.qLearning.BasicState;
+=======
+>>>>>>> 5c3268010d7cadb81de755fe9e98a0d219b9d93e
 import students.qLearning.State;
+import students.qLearning.StateFactory;
 import students.qLearning.Tuple;
 import students.qLearning.UtilStuff;
 
 public class QLearningBot implements Bot, Serializable {
 
-    private QLearning qStuff;    
+    private QLearning qStuff;
+    private boolean displayMode = false; // no exploration
 
     public QLearningBot() {
-        Optional<QLearning> perhabs = UtilStuff.readObject("q.bin");
+        String stateName = "AppleState";
+        Optional<QLearning> perhabs = UtilStuff.readObject("q_" + stateName + ".bin");
 
         if (perhabs.isPresent()) {
             qStuff = perhabs.get();
+            if (!qStuff.getStateName().equals(stateName)) {
+                throw new IllegalArgumentException("Differing states: stored is " + qStuff.getStateName() + ", but arg was " + stateName);
+            }
         }
         else {
-            qStuff = new QLearning();
+            qStuff = new QLearning(stateName);
         }
 
         qStuff.test += 1;
+    }
+
+    public void setDisplayMode() {
+        displayMode = true;
     }
 
     public void setEpsilon(double epsilon) {
         qStuff.setEpsilon(epsilon);
     }
 
-
     @Override
     public Direction chooseDirection(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
+<<<<<<< HEAD
         State st = new AStarState(snake, opponent, mazeSize, apple);
+=======
+        State st = StateFactory.create(qStuff.getStateName(), snake, opponent, mazeSize, apple);
+        //new AppleState(snake, opponent, mazeSize, apple);
+>>>>>>> 5c3268010d7cadb81de755fe9e98a0d219b9d93e
+
+        if (displayMode) {
+            Direction choice = qStuff.getOptimalMove(st);
+            return choice;
+        }
 
         Direction choice = qStuff.getMove(st);
-
 
         Tuple<Double, State> out = getValueAndState(snake, opponent, mazeSize, apple, choice);
         double moveScore = out._0;
@@ -78,7 +99,8 @@ public class QLearningBot implements Bot, Serializable {
 
         double points = appleEatPoints + deathPoints + killPoints + livingPoints;
 
-        State nextSt = new AppleState(snake0, snake1, mazeSize, apple);
+        State nextSt = StateFactory.create(qStuff.getStateName(), snake, opponent, mazeSize, apple);
+        //new AppleState(snake0, snake1, mazeSize, apple);
 
         return new Tuple<Double, State>(points, nextSt);
     }
@@ -91,6 +113,6 @@ public class QLearningBot implements Bot, Serializable {
         //qStuff.debug();
         System.out.println("Debug counter: " + qStuff.test);
 
-        UtilStuff.writeObject(qStuff, "q.bin");
+        UtilStuff.writeObject(qStuff, "q_" + qStuff.getStateName() + ".bin");
     }
 }

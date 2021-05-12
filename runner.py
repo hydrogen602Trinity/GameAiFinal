@@ -6,9 +6,20 @@ import pathlib
 
 # remember to export the jar
 
-def runOnce(f):
+def runOnce(f, st, window=False):
+    w = ''
+    if window is True:
+        w = 'true'
+    elif window is False:
+        w = 'false'
+    else:
+        assert not 'nope'
+
     # /usr/bin/env /usr/lib/jvm/java-11-openjdk-amd64/bin/java
-    s = subprocess.run(['/usr/bin/env', '/usr/lib/jvm/java-11-openjdk-amd64/bin/java', '-jar', 'GameAiFinal.jar', 'students.SampleBot', 'students.QLearningBot'], capture_output=True)
+    s = subprocess.run(['/usr/bin/env', '/usr/lib/jvm/java-11-openjdk-amd64/bin/java', '-jar', f'GameAiFinal_{st}.jar', 'students.SampleBot', 'students.QLearningBot', w], capture_output=True)
+    
+    if s.returncode != 0:
+        raise RuntimeError(s.stderr.decode())
     s.check_returncode()
     f.write(s.stdout.decode())
     f.write(s.stderr.decode())
@@ -22,9 +33,16 @@ def getWidth():
 
 if __name__ == "__main__":
     print(sys.argv)
-    n = 1
-    if len(sys.argv) > 1:
-        n = int(sys.argv[1])
+    n = sys.argv[1]
+    if len(sys.argv) > 2:
+        st = sys.argv[2]
+        if n == 'show':
+            runOnce(sys.stdout, st, True)
+            sys.exit(0)
+        n = int(n)
+        
+    else:
+        assert None
     
     #print(f"Running {n} batch{'es' if n > 1 else ''} of 5")
     print(f"Running for {n} minute{'s' if n > 1 else ''}")
@@ -38,10 +56,10 @@ if __name__ == "__main__":
     runs = 0
     counter = 0
     currentHour = 0
-    with open('autorunner.log', 'w') as f:
+    with open(f'autorunner_{st}.log', 'w') as f:
         try:
             while time.time() - startTime < seconds:
-                runOnce(f)
+                runOnce(f, st)
                 runs += 5
                 counter += 1
 
@@ -57,7 +75,7 @@ if __name__ == "__main__":
 
                 if (time.time() - startTime) // (60 * 60) > currentHour:
                     currentHour += 1
-                    s = subprocess.run(['cp', 'q.bin', f'q_{currentHour}.bin'])
+                    s = subprocess.run(['cp', f'q_{st}.bin', f'q_{st}_{currentHour}.bin'])
                     s.check_returncode()
                     
 

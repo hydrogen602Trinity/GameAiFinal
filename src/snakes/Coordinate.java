@@ -102,4 +102,9 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
         else
             return dx;
     }
+
+    @Override
+    public String toString() {
+        return "<" + this.x + ", " + this.y + ">";
+    }
 }

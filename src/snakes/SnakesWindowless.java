@@ -4,10 +4,10 @@ package snakes;
  * This class is responsible for the game's GUI window
  */
 public class SnakesWindowless implements Runnable {
-    private SnakeGame game;
-    private final static int TIME_LIMIT_PER_GAME = 3 * 60 * 1000; // time limit in mills
+    protected SnakeGame game;
+    protected final static int TIME_LIMIT_PER_GAME = 3 * 60 * 1000; // time limit in mills
 
-    private boolean running = false;
+    protected boolean running = false;
 
     /**
      * Creates and set ups the window
@@ -24,15 +24,11 @@ public class SnakesWindowless implements Runnable {
         running = true;
         long startTime = System.currentTimeMillis();
         while(running) {
-            long t = System.currentTimeMillis();
-
             try {
                 running = game.runOneStep();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            long elapsed = System.currentTimeMillis() - t;
 
             // check for time limit
             if (System.currentTimeMillis() - startTime >= TIME_LIMIT_PER_GAME) {

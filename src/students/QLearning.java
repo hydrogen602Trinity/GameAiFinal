@@ -16,10 +16,13 @@ public class QLearning implements Serializable {
     private double discount;
     private double epsilon;
 
+    private String stateName;
+
     public int test;
 
-    public QLearning(double alpha, double discount, double epsilon) {
+    public QLearning(double alpha, double discount, double epsilon, String stateName) {
         qValues = new HashMap<Tuple<State, Direction>, Double>();
+        this.stateName = stateName;
         this.alpha = alpha;
         this.discount = discount;
         this.epsilon = epsilon;
@@ -38,8 +41,16 @@ public class QLearning implements Serializable {
         System.out.println("}");
     }
 
-    public QLearning() {
-        this(1.0, 0.8, 0.25);
+    public QLearning(double epsilon, String stateName) {
+        this(0.25, 0.8, epsilon, stateName);
+    }
+
+    public QLearning(String stateName) {
+        this(0.25, 0.8, 0.25, stateName);
+    }
+
+    public String getStateName() {
+        return stateName;
     }
 
     public double getQValue(Tuple<State, Direction> key) {
@@ -120,6 +131,19 @@ public class QLearning implements Serializable {
             choice = d.get();
         }
 
+        return choice;
+    }
+
+    public Direction getOptimalMove(State st) {
+        Random random = new Random();
+        Direction[] allLegalDirs = st.getLegalActions();
+
+        // random choice in case q learning didn't return anything
+        Direction choice = allLegalDirs[random.nextInt(allLegalDirs.length)];
+
+        Optional<Direction> d = computeBestAction(st);
+        if (d.isPresent())
+            return d.get();
         return choice;
     }
 

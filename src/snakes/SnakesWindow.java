@@ -6,22 +6,20 @@ import java.awt.*;
 /**
  * This class is responsible for the game's GUI window
  */
-public class SnakesWindow implements Runnable {
+public class SnakesWindow extends SnakesWindowless {
     private JFrame frame;
     private SnakeCanvas canvas;
-    private SnakeGame game;
-    private final static int TIME_LIMIT_PER_GAME = 3 * 60 * 1000; // time limit in mills
     private final static int TIME_LIMIT_PER_STEP = 1000; // time limit for one step in mills
 
-    private boolean running = false;
 
     /**
      * Creates and set ups the window
      * @param game main game flow with all its states within
      */
     public SnakesWindow(SnakeGame game) {
+        super(game);
+
         frame = new JFrame("Snake Game");
-        this.game = game;
         canvas = new SnakeCanvas(game);
         JPanel panel = (JPanel) frame.getContentPane();
         panel.setPreferredSize(canvas.renderSize);
