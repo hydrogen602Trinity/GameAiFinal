@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import game.Point;
-import game.TPoint;
+// import game.Point;
+// import game.TPoint;
 import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
