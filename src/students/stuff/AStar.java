@@ -1,3 +1,7 @@
+/**
+ * Author: Jonathan
+ * 
+ */
 package students.stuff;
 
 import java.util.ArrayList;

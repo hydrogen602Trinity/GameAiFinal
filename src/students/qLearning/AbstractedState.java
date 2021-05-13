@@ -1,3 +1,9 @@
+/**
+ * Author: Jonathan
+ * 
+ * This was never completed
+ */
+
 package students.qLearning;
 
 import java.util.Iterator;

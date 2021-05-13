@@ -1,3 +1,8 @@
+/**
+ * Author: Jonathan
+ * 
+ */
+
 package students.qLearning;
 
 import java.io.Serializable;

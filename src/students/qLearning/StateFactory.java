@@ -1,3 +1,7 @@
+/**
+ * Author: Jonathan
+ * 
+ */
 package students.qLearning;
 
 import snakes.Coordinate;

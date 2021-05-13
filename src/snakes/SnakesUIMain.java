@@ -129,7 +129,7 @@ public class SnakesUIMain {
 
                 if (bot1 instanceof QLearningBot) {
                     if (doWindow) {
-                        ((QLearningBot) bot0).setDisplayMode();
+                        ((QLearningBot) bot1).setDisplayMode();
                     }
                 }
 

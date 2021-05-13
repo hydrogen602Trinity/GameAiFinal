@@ -1,3 +1,7 @@
+/**
+ * Author: Jazmine
+ * 
+ */
 package students.qLearning;
 
 import snakes.Coordinate;

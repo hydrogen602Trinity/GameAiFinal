@@ -1,3 +1,7 @@
+/**
+ * Author: Jonathan
+ * 
+ */
 package students;
 
 import snakes.Bot;

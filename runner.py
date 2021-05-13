@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+'''
+ Author: Jonathan
+'''
+
 import subprocess
 import sys
 import time
@@ -16,7 +21,7 @@ def runOnce(f, st, window=False):
         assert not 'nope'
 
     # /usr/bin/env /usr/lib/jvm/java-11-openjdk-amd64/bin/java
-    s = subprocess.run(['/usr/bin/env', '/usr/lib/jvm/java-11-openjdk-amd64/bin/java', '-jar', f'GameAiFinal_{st}.jar', 'students.SampleBot', 'students.QLearningBot', w], capture_output=True)
+    s = subprocess.run(['/usr/bin/env', '/usr/lib/jvm/java-11-openjdk-amd64/bin/java', '-jar', f'GameAiFinal_{st}.jar', 'students.AStarBot', 'students.QLearningBot', w], capture_output=True)
     
     if s.returncode != 0:
         raise RuntimeError(s.stderr.decode())

@@ -1,3 +1,9 @@
+/**
+ * Author: Jonathan
+ * 
+ * Debugging Serializable issues
+ */
+
 package debug;
 
 import java.io.FileInputStream;
